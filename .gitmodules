@@ -1,0 +1,9 @@
+[submodule "custom_nodes/ComfyUI_NestedNodeBuilder"]
+	path = custom_nodes/ComfyUI_NestedNodeBuilder
+	url = https://github.com/ssitu/ComfyUI_NestedNodeBuilder
+[submodule "custom_nodes/efficiency-nodes-comfyui"]
+	path = custom_nodes/efficiency-nodes-comfyui
+	url = https://github.com/LucianoCirino/efficiency-nodes-comfyui
+[submodule "custom_nodes/ComfyUI-Image-Selector"]
+	path = custom_nodes/ComfyUI-Image-Selector
+	url = https://github.com/SLAPaper/ComfyUI-Image-Selector.git
