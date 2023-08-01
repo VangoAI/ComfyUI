@@ -1,4 +1,5 @@
 import typing as tg
+import torch
 
 class Example:
     """
@@ -131,12 +132,57 @@ class LatentSelector:
             return ({'samples': samples[selected_index, :, :, :]}, )
 
         return (latent_image, )
+    
+class LatentDuplicator:
+    """
+    Duplicate each latent images and pipe through
+    """
+
+    @classmethod
+    def INPUT_TYPES(s):
+        """
+        Input: copies you want to get
+        """
+        return {
+            "required": {
+                "latent_image": ("LATENT", ),
+                "dup_times": ("INT", {
+                    "default": 1,
+                    "min": 1,
+                    "max": 16,
+                    "step": 1,
+                }),
+            },
+        }
+
+    RETURN_TYPES = ("LATENT", )
+    #RETURN_NAMES = ("image_output_name",)
+
+    FUNCTION = "run"
+
+    OUTPUT_NODE = False
+
+    CATEGORY = "latent"
+
+    def run(self, latent_image: tg.Sequence[tg.Mapping[tg.Text, torch.Tensor]],
+            dup_times: int):
+        samples = latent_image['samples']
+        shape = samples.shape
+
+        sample_list = [samples] + [
+            torch.clone(samples) for _ in range(dup_times - 1)
+        ]
+
+        return ({
+            'samples': torch.cat(sample_list),
+        }, )
 
 # A dictionary that contains all nodes you want to export with their names
 # NOTE: names should be globally unique
 NODE_CLASS_MAPPINGS = {
     "Example": Example,
-    "LatentSelector": LatentSelector
+    "LatentSelector": LatentSelector,
+    "LatentDuplicator": LatentDuplicator
 }
 
 # A dictionary that contains the friendly/humanly readable titles for the nodes
