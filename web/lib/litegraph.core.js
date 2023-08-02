@@ -10883,11 +10883,11 @@ LGraphNode.prototype.executeAction = function(action)
                     that.graph.removeLink(link.id);
                     break;
                 case "Make Input":
-                    // make the link circle blue
+                    // make the link blue
                     link.color = "#0000FF";
                     break;
                 case "Make Output":
-                    // make the link circle green
+                    // make the link green
                     link.color = "#097969";
                     break;
                 default:

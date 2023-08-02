@@ -723,6 +723,13 @@ export class ComfyUI {
 					}
 				}
 			}),
+			$el("button", {
+				id: "comfy-deoloy-button", textContent: "Deploy as API", onclick: () => {
+					if (!confirmClear.value || confirm("Deploy as API?")) {
+						const win = window.open("https://moorjani.notion.site/API-Documentation-9b0b4aa0df1c4ce78277b4c64acff463?pvs=4", '_blank');
+					}
+				}
+			}),
 		]);
 
 		const devMode = this.settings.addSetting({
