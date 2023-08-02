@@ -84,6 +84,7 @@ class PromptServer():
         self.routes = routes
         self.last_node_id = None
         self.client_id = None
+        self.task_results = {}
 
         @routes.get('/ws')
         async def websocket_handler(request):
@@ -567,6 +568,7 @@ class PromptServer():
     async def publish_loop(self):
         while True:
             msg = await self.messages.get()
+            print("sending", msg)
             await self.send(*msg)
 
     async def start(self, address, port, verbose=True, call_on_start=None):
