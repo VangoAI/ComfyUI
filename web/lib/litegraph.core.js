@@ -10884,10 +10884,12 @@ LGraphNode.prototype.executeAction = function(action)
                     break;
                 case "Make Input":
                     // make the link circle blue
-                    link.color = "#FFFFFF";
+                    link.color = "#0000FF";
+                    break;
                 case "Make Output":
                     // make the link circle green
-                    link.color = "#000000";
+                    link.color = "#097969";
+                    break;
                 default:
 					/*var nodeCreated = createDefaultNodeForSlot({   nodeFrom: node_left
 																	,slotFrom: link.origin_slot
