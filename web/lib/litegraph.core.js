@@ -10854,7 +10854,7 @@ LGraphNode.prototype.executeAction = function(action)
         var destType = false;
 		if (node_right && node_right.outputs && node_right.outputs[link.target_slot]) destType = node_right.inputs[link.target_slot].type;
 		
-		var options = ["Add Node",null,"Delete",null];
+		var options = ["Add Node", null, "Delete", null, "Make Input", null, "Make Output", null];
 		
 		
         var menu = new LiteGraph.ContextMenu(options, {
@@ -10882,6 +10882,12 @@ LGraphNode.prototype.executeAction = function(action)
                 case "Delete":
                     that.graph.removeLink(link.id);
                     break;
+                case "Make Input":
+                    // make the link circle blue
+                    link.color = "#FFFFFF";
+                case "Make Output":
+                    // make the link circle green
+                    link.color = "#000000";
                 default:
 					/*var nodeCreated = createDefaultNodeForSlot({   nodeFrom: node_left
 																	,slotFrom: link.origin_slot
