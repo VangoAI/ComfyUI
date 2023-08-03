@@ -8,6 +8,9 @@ import traceback
 import math
 import time
 import random
+from io import BytesIO
+import boto3
+from uuid import uuid4
 
 from PIL import Image, ImageOps
 from PIL.PngImagePlugin import PngInfo
@@ -1195,6 +1198,7 @@ class SaveImage:
         self.output_dir = folder_paths.get_output_directory()
         self.type = "output"
         self.prefix_append = ""
+        self.s3 = boto3.client('s3', region_name='us-west-2')
 
     @classmethod
     def INPUT_TYPES(s):
@@ -1229,8 +1233,20 @@ class SaveImage:
 
             file = f"{filename}_{counter:05}_.png"
             img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=4)
+
+            # save image to s3
+            id = uuid4()
+            key = f"images/{filename}_{str(id)}_.png"
+            
+            image_bytes = BytesIO()
+            img.save(image_bytes, format='png')
+            image_bytes.seek(0)
+            self.s3.put_object(Bucket="vango-logos", Key=key, Body=image_bytes)
+            s3_url = f"https://vango-logos.s3-us-west-2.amazonaws.com/{key}"
+
             results.append({
                 "filename": file,
+                "s3_url": s3_url,
                 "subfolder": subfolder,
                 "type": self.type
             })
