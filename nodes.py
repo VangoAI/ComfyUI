@@ -10,6 +10,8 @@ import time
 import random
 from io import BytesIO
 import boto3
+from botocore import UNSIGNED
+from botocore.config import Config
 from uuid import uuid4
 
 from PIL import Image, ImageOps
@@ -1198,7 +1200,7 @@ class SaveImage:
         self.output_dir = folder_paths.get_output_directory()
         self.type = "output"
         self.prefix_append = ""
-        self.s3 = boto3.client('s3', region_name='us-west-2')
+        self.s3 = boto3.client('s3', region_name='us-west-2', config=Config(signature_version=UNSIGNED))
 
     @classmethod
     def INPUT_TYPES(s):
