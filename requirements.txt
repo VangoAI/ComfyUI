@@ -11,3 +11,4 @@ scipy
 tqdm
 boto3
 botocore
+toml
