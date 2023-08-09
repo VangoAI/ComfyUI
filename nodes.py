@@ -1243,7 +1243,7 @@ class SaveImage:
             image_bytes = BytesIO()
             img.save(image_bytes, format='png')
             image_bytes.seek(0)
-            self.s3.put_object(Bucket="vango-logos", Key=key, Body=image_bytes)
+            # self.s3.put_object(Bucket="vango-logos", Key=key, Body=image_bytes)
             s3_url = f"https://vango-logos.s3-us-west-2.amazonaws.com/{key}"
 
             results.append({
