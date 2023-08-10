@@ -3,7 +3,6 @@ from PIL import Image, ImageOps
 from io import BytesIO
 import numpy as np
 import torch
-import folder_paths
 import os
 import zipfile
 import uuid
@@ -25,63 +24,63 @@ class LoraTrainer:
                 "lora_name": ("STRING", {"default": "my_lora"}),
                 "network_dim": ("INT", {
                     "default": 32, 
-                    "min": 1, #Minimum value
-                    "max": 128, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 1,
+                    "max": 128,
+                    "step": 1
                 }),
                 "network_alpha": ("INT", {
                     "default": 16, 
-                    "min": 1, #Minimum value
-                    "max": 128, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 1,
+                    "max": 128,
+                    "step": 1
                 }),
                 "conv_dim": ("INT", {
                     "default": 32, 
-                    "min": 1, #Minimum value
-                    "max": 128, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 1,
+                    "max": 128,
+                    "step": 1
                 }),
                 "conv_alpha": ("INT", {
                     "default": 16, 
-                    "min": 1, #Minimum value
-                    "max": 128, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 1,
+                    "max": 128,
+                    "step": 1
                 }),
                 "learning_rate": ("FLOAT", {
                     "default": 0.00001, 
-                    "min": 0.0, #Minimum value
-                    "max": 1.0, #Maximum value
-                    "step": 0.00001 #Slider's step
+                    "min": 0.0,
+                    "max": 1.0,
+                    "step": 0.00001
                 }),
                 "epochs": ("INT", {
                     "default": 20, 
-                    "min": 0, #Minimum value
-                    "max": 100, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 0,
+                    "max": 100,
+                    "step": 1
                 }),
                 "repeats": ("INT", {
                     "default": 1, 
-                    "min": 0, #Minimum value
-                    "max": 100, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 0,
+                    "max": 100,
+                    "step": 1
                 }),
                 "batch_size": ("INT", {
                     "default": 1, 
-                    "min": 0, #Minimum value
-                    "max": 100, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 0,
+                    "max": 100,
+                    "step": 1
                 }),
                 "seed": ("INT", {
                     "default": 0, 
-                    "min": 0, #Minimum value
-                    "max": 0xffffffffffffffff, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 0,
+                    "max": 0xffffffffffffffff,
+                    "step": 1
                 }),
                 "save_checkpoint_every_n_epochs": ("INT", {
                     "default": 1, 
-                    "min": 0, #Minimum value
-                    "max": 20, #Maximum value
-                    "step": 1 #Slider's step
+                    "min": 0,
+                    "max": 20,
+                    "step": 1
                 }),
             },
         }
@@ -495,71 +494,6 @@ class LoraTrainer:
         images = self.get_validation_outputs(lora_name)
         return (images, )
 
-class ValidationPrompts:
-    @classmethod
-    def INPUT_TYPES(s):
-        return {
-            "required": {
-                "prompt1": ("STRING", {"multiline": True, "default": "prompt 1"}),
-                "prompt2": ("STRING", {"multiline": True, "default": "prompt 2"}),
-                "prompt3": ("STRING", {"multiline": True, "default": "prompt 3"}),
-                "prompt4": ("STRING", {"multiline": True, "default": "prompt 4"}),
-                "prompt5": ("STRING", {"multiline": True, "default": "prompt 5"}),
-            }
-        }
-    
-    RETURN_TYPES = ("VALIDATION_PROMPTS",)
-
-    FUNCTION = "validation_prompts"
-
-    CATEGORY = "Train"
-
-    def validation_prompts(self, prompt1, prompt2, prompt3, prompt4, prompt5):
-        return ([prompt1, prompt2, prompt3, prompt4, prompt5], )
-
-class ValidationPrompts:
-    @classmethod
-    def INPUT_TYPES(s):
-        return {
-            "required": {
-                "prompt1": ("STRING", {"multiline": True, "default": "prompt 1"}),
-                "prompt2": ("STRING", {"multiline": True, "default": "prompt 2"}),
-                "prompt3": ("STRING", {"multiline": True, "default": "prompt 3"}),
-                "prompt4": ("STRING", {"multiline": True, "default": "prompt 4"}),
-                "prompt5": ("STRING", {"multiline": True, "default": "prompt 5"}),
-            }
-        }
-    
-    RETURN_TYPES = ("VALIDATION_PROMPTS",)
-
-    FUNCTION = "validation_prompts"
-
-    CATEGORY = "Train"
-
-    def validation_prompts(self, prompt1, prompt2, prompt3, prompt4, prompt5):
-        return ([prompt1, prompt2, prompt3, prompt4, prompt5], )
-
-
-class LoadZip:
-    @classmethod
-    def INPUT_TYPES(s):
-        input_dir = folder_paths.get_input_directory()
-        files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
-        return {"required":
-                    {"zip": (sorted(files), )},
-                }
-
-    CATEGORY = "Train"
-
-    RETURN_TYPES = ("ZIP", )
-    FUNCTION = "load_zip"
-
-    def load_zip(self, zip):
-        zip_path = folder_paths.get_annotated_filepath(zip)
-        return (zip_path, )
-
 NODE_CLASS_MAPPINGS = {
     "LoraTrainer": LoraTrainer,
-    "ValidationPrompts": ValidationPrompts,
-    "LoadZip": LoadZip,
 }
