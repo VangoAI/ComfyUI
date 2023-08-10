@@ -165,8 +165,8 @@ class LoraTrainer:
         merge_metadata_args = generate_args(metadata_config)
         prepare_buckets_args = generate_args(bucketing_config)
 
-        merge_metadata_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/finetune/merge_all_to_metadata.py {merge_metadata_args}"
-        prepare_buckets_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/finetune/prepare_buckets_latents.py {prepare_buckets_args}"
+        merge_metadata_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/finetune/merge_all_to_metadata.py {merge_metadata_args}"
+        prepare_buckets_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/finetune/prepare_buckets_latents.py {prepare_buckets_args}"
 
         subprocess.run(merge_metadata_command, shell=True)
         time.sleep(1)
@@ -476,7 +476,7 @@ class LoraTrainer:
             return args
 
         accelerate_conf = {
-            "config_file" : "/home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/accelerate_config/config.yaml",
+            "config_file" : "/home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/accelerate_config/config.yaml",
             "num_cpu_threads_per_process" : 1,
         }
 
@@ -488,7 +488,7 @@ class LoraTrainer:
         accelerate_args = train(accelerate_conf)
         train_args = train(train_conf)
 
-        final_args = f"accelerate launch {accelerate_args} /home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/sdxl_train_network.py {train_args}"
+        final_args = f"accelerate launch {accelerate_args} /home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/sdxl_train_network.py {train_args}"
         subprocess.run(final_args, shell=True)
 
         images = self.get_validation_outputs(lora_name)

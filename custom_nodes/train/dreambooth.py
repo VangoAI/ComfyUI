@@ -14,7 +14,7 @@ import shutil
 import ast
 import re
 
-class LoraTrainer:
+class DreamboothTrainer:
     @classmethod
     def INPUT_TYPES(s):
         return {
@@ -495,5 +495,5 @@ class LoraTrainer:
         return (images, )
 
 NODE_CLASS_MAPPINGS = {
-    "LoraTrainer": LoraTrainer,
+    "DreamboothTrainer": DreamboothTrainer,
 }
