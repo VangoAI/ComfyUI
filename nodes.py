@@ -1238,7 +1238,7 @@ class SaveImage:
 
             # save image to s3
             id = uuid4()
-            key = f"images/{filename}_{str(id)}_.png"
+            key = f"images/sdxl_eval_1/{filename}_{counter:05}_.png"
             
             image_bytes = BytesIO()
             img.save(image_bytes, format='png')
@@ -1253,7 +1253,6 @@ class SaveImage:
                 "type": self.type
             })
             counter += 1
-
         return { "ui": { "images": results } }
 
 class PreviewImage(SaveImage):

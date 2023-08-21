@@ -17,11 +17,14 @@ import re
 class DreamboothTrainer:
     @classmethod
     def INPUT_TYPES(s):
+        BASE_MODELS = ["SDXL 0.9", "SDXL 1.0", "SD 1.5", "SD 2.1", "Realistic Vision 5.0", "Realistic Vision 1.4", "DreamShaper", "DreamShaper XL1.0", "MajicMix Realistic 2.5"]
         return {
             "required": {
+                "base_model": (BASE_MODELS, ),
                 "dataset": ("ZIP",),
                 "validation_prompts": ("VALIDATION_PROMPTS",),
-                "lora_name": ("STRING", {"default": "my_lora"}),
+                "model_name": ("STRING", {"default": "my_dreambooth_model"}),
+                "token": ("STRING", {"default": "token"}),
                 "network_dim": ("INT", {
                     "default": 32, 
                     "min": 1,
@@ -165,8 +168,8 @@ class DreamboothTrainer:
         merge_metadata_args = generate_args(metadata_config)
         prepare_buckets_args = generate_args(bucketing_config)
 
-        merge_metadata_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/finetune/merge_all_to_metadata.py {merge_metadata_args}"
-        prepare_buckets_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/finetune/prepare_buckets_latents.py {prepare_buckets_args}"
+        merge_metadata_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/finetune/merge_all_to_metadata.py {merge_metadata_args}"
+        prepare_buckets_command = f"python3 /home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/finetune/prepare_buckets_latents.py {prepare_buckets_args}"
 
         subprocess.run(merge_metadata_command, shell=True)
         time.sleep(1)
@@ -449,10 +452,10 @@ class DreamboothTrainer:
         
         return images
 
-    def train_lora(self, dataset, validation_prompts, lora_name, network_dim, network_alpha, conv_dim, conv_alpha, learning_rate, epochs, repeats, batch_size, seed, save_checkpoint_every_n_epochs):
+    def train_lora(self, base_model, dataset, validation_prompts, model_name, token, network_dim, network_alpha, conv_dim, conv_alpha, learning_rate, epochs, repeats, batch_size, seed, save_checkpoint_every_n_epochs):
         train_path = self.extract_dataset(dataset)
         meta_lat_json_path = self.generate_latents(train_path)
-        sample_prompt, config_file = self.get_training_config(validation_prompts, lora_name, train_path, meta_lat_json_path, network_dim, network_alpha, conv_dim, conv_alpha, learning_rate, epochs, repeats, batch_size, seed, save_checkpoint_every_n_epochs)
+        sample_prompt, config_file = self.get_training_config(validation_prompts, model_name, train_path, meta_lat_json_path, network_dim, network_alpha, conv_dim, conv_alpha, learning_rate, epochs, repeats, batch_size, seed, save_checkpoint_every_n_epochs)
 
         def read_file(filename):
             with open(filename, "r") as f:
@@ -476,7 +479,7 @@ class DreamboothTrainer:
             return args
 
         accelerate_conf = {
-            "config_file" : "/home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/accelerate_config/config.yaml",
+            "config_file" : "/home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/accelerate_config/config.yaml",
             "num_cpu_threads_per_process" : 1,
         }
 
@@ -488,10 +491,10 @@ class DreamboothTrainer:
         accelerate_args = train(accelerate_conf)
         train_args = train(train_conf)
 
-        final_args = f"accelerate launch {accelerate_args} /home/ubuntu/vango_ComfyUI/custom_nodes/lora_trainer/kohya-trainer/sdxl_train_network.py {train_args}"
+        final_args = f"accelerate launch {accelerate_args} /home/ubuntu/vango_ComfyUI/custom_nodes/train/kohya-trainer/sdxl_train_network.py {train_args}"
         subprocess.run(final_args, shell=True)
 
-        images = self.get_validation_outputs(lora_name)
+        images = self.get_validation_outputs(model_name)
         return (images, )
 
 NODE_CLASS_MAPPINGS = {

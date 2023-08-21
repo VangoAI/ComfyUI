@@ -17,8 +17,10 @@ import re
 class LoraTrainer:
     @classmethod
     def INPUT_TYPES(s):
+        BASE_MODELS = ["SDXL 0.9", "SDXL 1.0", "SD 1.5", "SD 2.1", "Realistic Vision 5.0", "Realistic Vision 1.4", "DreamShaper", "DreamShaper XL1.0", "MajicMix Realistic 2.5"]
         return {
             "required": {
+                "base_model": (BASE_MODELS, ),
                 "dataset": ("ZIP",),
                 "validation_prompts": ("VALIDATION_PROMPTS",),
                 "lora_name": ("STRING", {"default": "my_lora"}),
@@ -449,7 +451,7 @@ class LoraTrainer:
         
         return images
 
-    def train_lora(self, dataset, validation_prompts, lora_name, network_dim, network_alpha, conv_dim, conv_alpha, learning_rate, epochs, repeats, batch_size, seed, save_checkpoint_every_n_epochs):
+    def train_lora(self, base_model, dataset, validation_prompts, lora_name, network_dim, network_alpha, conv_dim, conv_alpha, learning_rate, epochs, repeats, batch_size, seed, save_checkpoint_every_n_epochs):
         train_path = self.extract_dataset(dataset)
         meta_lat_json_path = self.generate_latents(train_path)
         sample_prompt, config_file = self.get_training_config(validation_prompts, lora_name, train_path, meta_lat_json_path, network_dim, network_alpha, conv_dim, conv_alpha, learning_rate, epochs, repeats, batch_size, seed, save_checkpoint_every_n_epochs)

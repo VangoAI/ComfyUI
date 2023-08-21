@@ -12,3 +12,4 @@ tqdm
 boto3
 botocore
 toml
+git+https://github.com/timojl/clipseg.git
