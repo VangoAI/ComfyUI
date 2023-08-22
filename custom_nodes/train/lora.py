@@ -17,8 +17,10 @@ import re
 class LoraTrainer:
     @classmethod
     def INPUT_TYPES(s):
+        BASE_MODELS = ["SDXL 0.9"]
         return {
             "required": {
+                "base_model": (BASE_MODELS, ),
                 "dataset": ("ZIP",),
                 "validation_prompts": ("VALIDATION_PROMPTS",),
                 "lora_name": ("STRING", {"default": "my_lora"}),
