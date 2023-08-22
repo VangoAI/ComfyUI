@@ -7,3 +7,9 @@
 [submodule "custom_nodes/ComfyUI-Image-Selector"]
 	path = custom_nodes/ComfyUI-Image-Selector
 	url = https://github.com/SLAPaper/ComfyUI-Image-Selector.git
+[submodule "custom_nodes/adv-clip"]
+	path = custom_nodes/adv-clip
+	url = https://github.com/BlenderNeko/ComfyUI_ADV_CLIP_emb
+[submodule "custom_nodes/tiled-ksampler"]
+	path = custom_nodes/tiled-ksampler
+	url = https://github.com/BlenderNeko/ComfyUI_TiledKSampler
