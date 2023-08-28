@@ -10,6 +10,7 @@ import glob
 import struct
 from PIL import Image, ImageOps
 from io import BytesIO
+import aiofiles
 
 try:
     import aiohttp
@@ -226,6 +227,40 @@ class PromptServer():
                         original_pil.save(filepath, compress_level=4)
 
             return image_upload(post, image_save_function)
+
+        @routes.post("/upload/checkpoint/chunk")
+        async def upload_checkpoint_chunk(request):
+            reader = await request.multipart()
+            field = await reader.next()
+            filename = field.filename
+            file_path = os.path.join('./models/checkpoints', filename)
+
+            # Open the file in append mode to write chunks
+            async with aiofiles.open(file_path, 'ab') as f:
+                while True:
+                    chunk = await field.read_chunk()  # Default size: 8192 bytes
+                    if not chunk:
+                        break
+                    await f.write(chunk)
+
+            return web.Response(text='Chunk successfully uploaded')
+
+        @routes.post("/upload/lora/chunk")
+        async def upload_lora_chunk(request):
+            reader = await request.multipart()
+            field = await reader.next()
+            filename = field.filename
+            file_path = os.path.join('./models/loras', filename)
+
+            # Open the file in append mode to write chunks
+            async with aiofiles.open(file_path, 'ab') as f:
+                while True:
+                    chunk = await field.read_chunk()  # Default size: 8192 bytes
+                    if not chunk:
+                        break
+                    await f.write(chunk)
+
+            return web.Response(text='Chunk successfully uploaded')
 
         @routes.get("/view")
         async def view_image(request):

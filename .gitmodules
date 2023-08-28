@@ -13,3 +13,9 @@
 [submodule "custom_nodes/tiled-ksampler"]
 	path = custom_nodes/tiled-ksampler
 	url = https://github.com/BlenderNeko/ComfyUI_TiledKSampler
+[submodule "custom_nodes/masquerade"]
+	path = custom_nodes/masquerade
+	url = https://github.com/BadCafeCode/masquerade-nodes-comfyui
+[submodule "custom_nodes/rembg"]
+	path = custom_nodes/rembg
+	url = https://github.com/Jcd1230/rembg-comfyui-node
